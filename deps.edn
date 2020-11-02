@@ -1,7 +1,6 @@
 {:mvn/repos {"github" {:url "https://maven.pkg.github.com/kepler16/*"}}
  :deps
- {integrant/integrant {:mvn/version "0.8.0"}
-  metosin/reitit {:mvn/version "0.5.10"}
+ {metosin/reitit {:mvn/version "0.5.10"}
   kepler16/http {:mvn/version "0.2.5"}}
 
  :aliases
@@ -9,7 +8,7 @@
 
   :generate-pom {:exec-fn kepler16.deploy/pom!
                  :exec-args {:group-id "kepler16"
-                             :package-name "template-lib"
+                             :package-name "clam"
                              :version "0.0.1"}}
 
   :build {:exec-fn kepler16.deploy/build!
