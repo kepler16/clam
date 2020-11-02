@@ -48,7 +48,7 @@
     (set-status (or status 200))
     (set-body body)))
 
-(defn proxy-handler
+(defn ring->node-handler
   "Returns a NodeJS Server handler for the given ring handler."
   [handler]
   (fn [request response]
@@ -58,11 +58,5 @@
         (update-response response response-map)))))
 
 (defn run-server [handler {:keys [port]}]
-  (let [server (.createServer http (proxy-handler handler))]
+  (let [server (.createServer http (ring->node-handler handler))]
     (.listen server port)))
-
-(defn handler [req]
-  (js/console.log req)
-  {:status 200
-   :headers {"Content-Type" "application/json"}
-   :body (js/JSON.stringify (clj->js {:foo "bar!"}))})
