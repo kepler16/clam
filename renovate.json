@@ -1,0 +1,5 @@
+{
+  "extends": [
+    "github>kepler16/renovate-config:default"
+  ]
+}

@@ -1,0 +1,19 @@
+{:mvn/repos {"github" {:url "https://maven.pkg.github.com/kepler16/*"}}
+ :deps
+ {integrant/integrant {:mvn/version "0.8.0"}
+  metosin/reitit {:mvn/version "0.5.10"}
+  kepler16/http {:mvn/version "0.2.5"}}
+
+ :aliases
+ {:deployer {:extra-deps {kepler16/deploy {:mvn/version "0.0.8"}}}
+
+  :generate-pom {:exec-fn kepler16.deploy/pom!
+                 :exec-args {:group-id "kepler16"
+                             :package-name "template-lib"
+                             :version "0.0.1"}}
+
+  :build {:exec-fn kepler16.deploy/build!
+          :exec-args {}}
+
+  :deploy {:exec-fn kepler16.deploy/deploy!
+           :exec-args {}}}}
