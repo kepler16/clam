@@ -2,6 +2,7 @@
  :deps
  {metosin/reitit {:mvn/version "0.5.10"}
   kepler16/http {:mvn/version "0.2.8"}
+  cljs-bean/cljs-bean {:mvn/version "1.6.0"}
   uix/core {:git/url "https://github.com/roman01la/uix.git"
             :deps/root "core"
             :sha "2891747e1340986195448052354c3390c9eadd03"}
@@ -15,7 +16,7 @@
   :generate-pom {:exec-fn kepler16.deploy/pom!
                  :exec-args {:group-id "kepler16"
                              :package-name "clam"
-                             :version "1.0.0"}}
+                             :version "2.0.0"}}
 
   :build {:exec-fn kepler16.deploy/build!
           :exec-args {}}
