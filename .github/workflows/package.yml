@@ -13,9 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: DeLaGuardo/setup-graalvm@3.0
+      - uses: actions/setup-java@v1
         with:
-          graalvm-version: '19.3.1.java11'
+          java-version: '13'
 
       - uses: DeLaGuardo/setup-clojure@master
         with:
