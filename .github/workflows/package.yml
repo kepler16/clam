@@ -21,7 +21,7 @@ jobs:
         with:
           cli: '1.10.1.727'
 
-      - uses: s4u/maven-settings-action@v2.2.0
+      - uses: s4u/maven-settings-action@v2.3.0
         with:
           servers: '[{"id": "github", "username": "${{secrets.ORG_GITHUB_ACTOR}}", "password": "${{secrets.ORG_GITHUB_TOKEN}}"}]'
           githubServer: false
