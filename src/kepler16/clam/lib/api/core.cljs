@@ -1,4 +1,4 @@
-(ns kepler16.clam.server.core
+(ns kepler16.clam.lib.api.core
   (:require [uix.core.alpha :as uix]
             ["react-dom/server" :as dom-server]
             [kepler16.clam.router :as clam.router]
@@ -14,7 +14,6 @@
                 (update el :props #(dissoc % :ssronly :data-react-helmet))
                 el)))
        bean/->js))
-
 
 (defn- helmet-document [^js h child]
   [:html (-> h .-htmlAttributes .toComponent js->clj)
@@ -34,7 +33,8 @@
           app (->> (uix/as-element
                     [clam.router/router {:location location
                                          :context {}}
-                     app])
+                     [:div#app
+                      app]])
                    (.renderToString dom-server))
           h (helmet/Helmet.renderStatic)
           document-container (->> (uix/as-element

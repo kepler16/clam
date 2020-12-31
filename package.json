@@ -1,0 +1,20 @@
+{
+	"name": "clam-cljs",
+	"version": "0.0.1",
+	"license": "UNLICENSED",
+	"scripts": {
+		"dev": "shadow-cljs watch cli",
+		"build": "shadow-cljs release cli"
+	},
+	"bin": {
+		"clam": "./bin/runner.js"
+	},
+	"devDependencies": {
+		"source-map-support": "^0.5.19",
+		"ws": "^7.4.2"
+	},
+	"dependencies": {
+		"find-up": "^5.0.0",
+		"yargs": "^16.2.0"
+	}
+}

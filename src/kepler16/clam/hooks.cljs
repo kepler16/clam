@@ -1,4 +1,4 @@
-(ns kepler16.clam.client.hooks
+(ns kepler16.clam.hooks
   (:require [uix.core.alpha :as uix]))
 
 (defn use-first-render []

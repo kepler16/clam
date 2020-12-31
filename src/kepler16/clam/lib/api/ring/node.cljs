@@ -1,4 +1,4 @@
-(ns kepler16.clam.server.ring.node
+(ns kepler16.clam.lib.api.ring.node
   (:require
    [clojure.string :as str]
    ["http" :as http]

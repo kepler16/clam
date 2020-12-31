@@ -1,0 +1,5 @@
+{:deps true
+ :builds
+ {:cli {:target :node-library
+        :exports {:cli kepler16.clam.lib.cli.core/cli}
+        :output-to "bin/cli.js"}}}

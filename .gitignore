@@ -2,3 +2,7 @@
 pom.xml
 dist
 clam-template
+clam.iml
+.shadow-cljs
+node_modules
+server-components-demo
