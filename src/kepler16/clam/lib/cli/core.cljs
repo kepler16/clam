@@ -5,12 +5,15 @@
             ["fs" :as fs]
             ["child_process" :as child-process]
             ["util" :as util]
+            [kepler16.clam.lib.cli.death :as death]
             [clojure.edn :as edn]
-            [cljs.core.async :as a]))
+            [cljs.core.async :as a]
+						[process :as process]))
 
 (defn resolve-to [p data]
   (fn [argv]
     (a/put! p data)))
+
 
 (defn yarger [p]
   (-> (yargs)
@@ -43,36 +46,36 @@
        :config config})))
 
 (defn handle-release [{:keys [config-dir]} argv]
-  (-> (child-process/spawn
-       "clj"
-       #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
-       #js {:stdio "inherit"
-            :cwd config-dir})
-      (.on "close" #(js/process.exit %))))
+  (doto (child-process/spawn
+           "clj"
+           #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
+           #js {:stdio "inherit"
+                :cwd config-dir})
+    (death/kill-process-on-death!)))
 
 (defn handle-tailwind [{:keys [config-dir]} argv]
-  (-> (child-process/spawn
-       "npx"
-       #js ["tailwindcss-cli@latest" "build" "./resources/css/tailwind.css" "-o" "public/static/css/tailwind.css"]
-       #js {:stdio "inherit"
-            :cwd config-dir})
-      (.on "close" #(js/process.exit %))))
+  (doto (child-process/spawn
+           "npx"
+           #js ["tailwindcss-cli@latest" "build" "./resources/css/tailwind.css" "-o" "public/static/css/tailwind.css"]
+           #js {:stdio "inherit"
+                :cwd config-dir})
+    (death/kill-process-on-death!)))
 
 
 (defn handle-dev [{:keys [config-dir]} argv]
-  (-> (child-process/spawn
-       "vercel"
-       #js ["dev"]
-       #js {:stdio "inherit"
-            :cwd config-dir})
-      (.on "close" #(js/process.exit %)))
+  (doto (child-process/spawn
+         "vercel"
+         #js ["dev"]
+         #js {:stdio "inherit"
+              :cwd config-dir})
+    (death/kill-process-on-death!))
 
-  (-> (child-process/spawn
-       "clj"
-       #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/watch"]
-       #js {:stdio "inherit"
-            :cwd config-dir})
-      (.on "close" #(js/process.exit %))))
+  (doto (child-process/spawn
+          "clj"
+          #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/watch"]
+          #js {:stdio "inherit"
+                :cwd config-dir})
+    (death/kill-process-on-death!)))
 
 (defn handle [args]
   (let [p (a/promise-chan)
@@ -88,9 +91,9 @@
           :release (handle-release context argv)
           :tailwind (handle-tailwind context argv))))))
 
-
 (defn cli [args]
   (try
+    (death/on-death! (fn [] (process/exit 1)))
     (handle (.splice args 2))
     (catch :default ex
       (println ex)

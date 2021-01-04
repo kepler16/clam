@@ -2,7 +2,7 @@
   (:require [kepler16.clam.lib.api.core :as clam.api]
             [kepler16.clam.lib.api.ring.node :as clam.ring]
             [reitit.ring :as reitit.ring]
-            [site.core :as site]))
+            [kepler16.clam.lib.user.site :as site]))
 
 (defn api-404 [_]
   {:body "This is not the route you're looking for"})

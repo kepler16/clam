@@ -1,14 +1,57 @@
 (ns kepler16.clam.lib.user.site
+  {:dev/always true}
   (:require ["react-router-dom" :as rr]
             [kepler16.clam.core :as clam]
-            [site.core :as site]
-            ["react-helmet" :as helmet]))
+            [kepler16.clam.router :as router]
+            [kepler16.clam.util :as clam.util]
+            [kepler16.clam.lib.build.routes :as routes]
+            [kepler16.clam.head :as head]
+            kepler16.clam.lib.user.pages))
+
+(def site-data
+  (routes/inline-clam-site-data! "pages"))
+
+(defn not-found []
+  [:div "Page not found"])
+
+(defn head []
+  [:<>
+   [head/Head
+    [:title "Clam"]]
+
+   (when-not (clam.util/browser?)
+     [head/Head
+      [:script {:ssronly "true"
+                :defer true
+                :src "/static/dist/cljs/main.js"}]])])
+
+(defn default-site-root [page]
+  [:<>
+   page])
+
+(def site-root (or (some-> site-data :config :site :root) default-site-root))
+
+(defn page []
+  (into
+   [router/switch {}]
+   (concat
+    (map
+     (fn [{:keys [url-path page-data entry]}]
+       (let [{:keys [component]} page-data]
+         (println page-data)
+         [:> rr/Route {:path url-path :exact true}
+          [component]]))
+     (:pages site-data))
+    [[not-found]])))
 
 (defn root []
   [:<>
-   [site/root]])
+   [head]
+   [site-root
+    [page]]])
 
 (defn render! []
+  (js/console.log "rendering")
   (clam/render
    (js/document.getElementById "app")
    [root]))

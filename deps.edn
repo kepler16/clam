@@ -12,7 +12,10 @@
            :deps/root "dom"
            :sha "2891747e1340986195448052354c3390c9eadd03"}
   cli-matic/cli-matic {:mvn/version "0.4.3"}
-  org.clojure/core.async {:mvn/version "1.3.610"}}
+  org.clojure/core.async {:mvn/version "1.3.610"}
+  juxt/dirwatch {:mvn/version "0.2.5"}
+  integrant/integrant {:mvn/version "0.8.0"}
+  integrant/repl {:mvn/version "0.3.2"}}
 
  :aliases
  {:server {:exec-fn kepler16.clam.dev.core/start-alternative
