@@ -2,6 +2,7 @@
   (:require
    [shadow.cljs.devtools.server :as server]
    [shadow.cljs.devtools.api :as cljs]
+   [shadow.cljs.devtools.server.fs-watch :as fs-watch]
    [integrant.core :as ig]
    [juxt.dirwatch :as dirwatch]
    [clojure.java.io :as io]
@@ -52,13 +53,12 @@
 
 (defmethod ig/init-key :clam/file-watcher [_ {:keys [dir]}]
   (let [c (a/chan (a/dropping-buffer 100))]
-    {:watcher
-     (dirwatch/watch-dir #(a/put! c %) (io/file dir))
+    {:watcher (fs-watch/start {} [(io/file dir)] ["edn"] #(a/put! c %))
      :<events c}))
 
 (defmethod ig/halt-key! :clam/file-watcher [_ {:keys [watcher <events]}]
   (a/close! <events)
-  (dirwatch/close-watcher watcher))
+  (fs-watch/stop watcher))
 
 (defn generate-pages-template-override []
   (let [pages-template (slurp (io/resource "kepler16/clam/lib/user/pages.cljsx"))

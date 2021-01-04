@@ -1,8 +1,9 @@
 {:mvn/repos {"github" {:url "https://maven.pkg.github.com/kepler16/*"}}
+
  :paths ["src"]
+
  :deps
  {metosin/reitit {:mvn/version "0.5.10"}
-  kepler16/http {:mvn/version "0.2.8"}
   thheller/shadow-cljs {:mvn/version "2.11.11"}
   cljs-bean/cljs-bean {:mvn/version "1.6.0"}
   uix/core {:git/url "https://github.com/roman01la/uix.git"
@@ -21,15 +22,22 @@
  {:server {:exec-fn kepler16.clam.dev.core/start-alternative
            :exec-args {}}
 
-  :deployer {:extra-deps {kepler16/deploy {:mvn/version "0.0.8"}}}
+  :deployer {:jvm-opts ["--illegal-access=deny"]
+             :extra-deps {org.clojure/clojure {:mvn/version "1.10.1"}
+                          kepler16/deploy {:mvn/version "0.0.8"}}}
+
+  :dev {:extra-deps {kepler16/deploy {:local/root "../deploy"}}}
 
   :generate-pom {:exec-fn kepler16.deploy/pom!
                  :exec-args {:group-id "kepler16"
                              :package-name "clam"
-                             :version "3.0.0"}}
+                             :version "4.0.0"}}
 
   :build {:exec-fn kepler16.deploy/build!
           :exec-args {}}
 
   :deploy {:exec-fn kepler16.deploy/deploy!
-           :exec-args {}}}}
+           :exec-args {}}
+
+  :deploy-clojars {:exec-fn kepler16.deploy/deploy-clojars!
+                   :exec-args {}}}}
