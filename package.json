@@ -1,11 +1,12 @@
 {
-	"name": "clam-cljs",
+	"name": "@kepler16/clam",
 	"version": "0.0.1",
 	"license": "UNLICENSED",
 	"scripts": {
 		"dev": "shadow-cljs watch cli",
 		"build": "shadow-cljs release cli"
 	},
+	"files": ["bin/*"],
 	"bin": {
 		"clam": "./bin/runner.js"
 	},
