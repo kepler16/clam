@@ -6,7 +6,10 @@
 		"dev": "shadow-cljs watch cli",
 		"build": "shadow-cljs release cli"
 	},
-	"files": ["bin/*"],
+	"files": [
+		"bin/cli.js",
+		"bin/runner.js"
+	],
 	"bin": {
 		"clam": "./bin/runner.js"
 	},
