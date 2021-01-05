@@ -5,23 +5,26 @@
             ["fs" :as fs]
             ["child_process" :as child-process]
             ["util" :as util]
+            ["express" :as express]
+            ["http" :as http]
+            ["./server" :as dev-server]
+            ["mkdirp" :as mkdirp]
             [kepler16.clam.lib.cli.death :as death]
             [clojure.edn :as edn]
             [cljs.core.async :as a]
-						[process :as process]))
+            [process :as process]))
 
 (defn resolve-to [p data]
   (fn [argv]
     (a/put! p data)))
 
-
 (defn yarger [p]
   (-> (yargs)
       (.command "dev", "start the dev server"
                 (fn [^js yargs])
-                ;; (-> yargs
-                ;;     (.positional "port" #js {:describe "port to bind on"
-                ;;                              :default 5000})))
+                  ;; (-> yargs
+                  ;;     (.positional "port" #js {:describe "port to bind on"
+                  ;;                              :default 5000})))
                 (resolve-to p :dev))
       (.command "tailwind", "compile tailwind"
                 (fn [^js yargs])
@@ -38,8 +41,8 @@
   (let [config-path (find-up/sync (clj->js matcher) #js {})
         config-dir (some-> config-path path/dirname)
         config (some-> config-path
-                   (fs/readFileSync #js {:encoding "utf8"})
-                   (edn/read-string))]
+                       (fs/readFileSync #js {:encoding "utf8"})
+                       (edn/read-string))]
     (when config
       {:config-path config-path
        :config-dir config-dir
@@ -47,34 +50,48 @@
 
 (defn handle-release [{:keys [config-dir]} argv]
   (doto (child-process/spawn
-           "clj"
-           #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
-           #js {:stdio "inherit"
-                :cwd config-dir})
+         "clj"
+         #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
+         #js {:stdio "inherit"
+              :cwd config-dir})
     (death/kill-process-on-death!)))
 
 (defn handle-tailwind [{:keys [config-dir]} argv]
   (doto (child-process/spawn
-           "npx"
-           #js ["tailwindcss-cli@latest" "build" "./resources/css/tailwind.css" "-o" "public/static/css/tailwind.css"]
-           #js {:stdio "inherit"
-                :cwd config-dir})
-    (death/kill-process-on-death!)))
-
-
-(defn handle-dev [{:keys [config-dir]} argv]
-  (doto (child-process/spawn
-         "vercel"
-         #js ["dev"]
+         "npx"
+         #js ["tailwindcss-cli@latest" "build" "./resources/css/tailwind.css" "-o" "public/static/css/tailwind.css"]
          #js {:stdio "inherit"
               :cwd config-dir})
-    (death/kill-process-on-death!))
+    (death/kill-process-on-death!)))
+
+(defn dev-server [root]
+  (let [app (express)]
+    (doto app
+      (.use (.static express "public"))
+      (.use (dev-server/requestListener root))
+      (.listen 3000))))
+
+
+  ;; (doto (http/createServer (dev-server/requestListener root))
+  ;;   (.listen 3000)))
+
+(defn handle-dev [{:keys [config-dir]} argv]
+  ;; (doto (child-process/spawn
+  ;;        "vercel"
+  ;;        #js ["dev"]
+  ;;        #js {:stdio "inherit"
+  ;;             :cwd config-dir})
+  ;;   (death/kill-process-on-death!))
+
+  (dev-server config-dir)
+
+  (mkdirp/sync (str config-dir "/.clam/cp"))
 
   (doto (child-process/spawn
-          "clj"
-          #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/watch"]
-          #js {:stdio "inherit"
-                :cwd config-dir})
+         "clj"
+         #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/watch"]
+         #js {:stdio "inherit"
+              :cwd config-dir})
     (death/kill-process-on-death!)))
 
 (defn handle [args]

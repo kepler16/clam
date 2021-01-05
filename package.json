@@ -1,10 +1,11 @@
 {
 	"name": "@kepler16/clam",
-	"version": "0.0.1",
+	"version": "0.0.3",
 	"license": "UNLICENSED",
 	"scripts": {
 		"dev": "shadow-cljs watch cli",
-		"build": "shadow-cljs release cli"
+		"build": "shadow-cljs release cli",
+		"uix": "git clone --depth=1 --branch=master https://github.com/roman01la/uix.git uix && rm -rf ./uix/.git"
 	},
 	"files": [
 		"bin/cli.js",
@@ -18,7 +19,9 @@
 		"ws": "^7.4.2"
 	},
 	"dependencies": {
+		"express": "^4.17.1",
 		"find-up": "^5.0.0",
+		"mkdirp": "^1.0.4",
 		"yargs": "^16.2.0"
 	}
 }
