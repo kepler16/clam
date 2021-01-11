@@ -82,10 +82,12 @@
   ;;        #js {:stdio "inherit"
   ;;             :cwd config-dir})
   ;;   (death/kill-process-on-death!))
+  (try
+    (fs/unlinkSync "./api/dist/handler.js")
+    (catch js/Error e nil))
+  (mkdirp/sync (str config-dir "/.clam/cp"))
 
   (dev-server config-dir)
-
-  (mkdirp/sync (str config-dir "/.clam/cp"))
 
   (doto (child-process/spawn
          "clj"

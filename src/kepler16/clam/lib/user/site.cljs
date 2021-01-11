@@ -6,10 +6,10 @@
             [kepler16.clam.util :as clam.util]
             [kepler16.clam.lib.build.routes :as routes]
             [kepler16.clam.head :as head]
-            kepler16.clam.lib.user.pages))
+            [kepler16.clam.lib.user.pages :as pages]
+            [kepler16.clam.lib.user.dev]))
 
-(def site-data
-  (routes/inline-clam-site-data! "pages"))
+(def site-data pages/site-data)
 
 (defn not-found []
   [:div "Page not found"])
@@ -36,11 +36,9 @@
    [router/switch {}]
    (concat
     (map
-     (fn [{:keys [url-path page-data entry]}]
-       (let [{:keys [component]} page-data]
-         (println page-data)
-         [:> rr/Route {:path url-path :exact true}
-          [component]]))
+     (fn [{:keys [path component]}]
+       [:> rr/Route {:path path :exact true}
+        [component]])
      (:pages site-data))
     [[not-found]])))
 
