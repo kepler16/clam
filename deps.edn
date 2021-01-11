@@ -31,7 +31,7 @@
   :generate-pom {:exec-fn kepler16.deploy/pom!
                  :exec-args {:group-id "kepler16"
                              :package-name "clam"
-                             :version "4.0.2"}}
+                             :version "4.0.3"}}
 
   :build {:exec-fn kepler16.deploy/build!
           :exec-args {}}
