@@ -72,7 +72,7 @@
 (def build-api
   `{:build-id :clam/api
     :target :node-library
-    :output-to "api/dist/handler.js"
+    :output-to ".clam/builds/api/dist/handler.js"
     :exports-var kepler16.clam.lib.user.api/handler})
 
 (def system-config-defaults
@@ -133,7 +133,7 @@
 
   ;; serverless
   (fs/mkdirs ".vercel_build_output/functions/node/renderer")
-  (fs/copy (io/file "api/dist/handler.js") (io/file ".vercel_build_output/functions/node/renderer/index.js"))
+  (fs/copy (io/file ".clam/builds/api/dist/handler.js") (io/file ".vercel_build_output/functions/node/renderer/index.js"))
   (fs/copy-dir (io/file "node_modules") (io/file ".vercel_build_output/functions/node/renderer/node_modules"))
 
   ;; routes

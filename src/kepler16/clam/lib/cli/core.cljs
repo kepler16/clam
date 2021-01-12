@@ -50,7 +50,7 @@
 
 (defn prepare-files [config-dir]
   (try
-    (fs/unlinkSync "./api/dist/handler.js")
+    (fs/unlinkSync ".clam/builds/api/dist/handler.js")
     (catch js/Error e nil))
   (mkdirp/sync (str config-dir "/.clam/cp")))
 
