@@ -1,6 +1,6 @@
 {
 	"name": "@kepler16/clam",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"license": "UNLICENSED",
 	"scripts": {
 		"dev": "shadow-cljs watch cli",
