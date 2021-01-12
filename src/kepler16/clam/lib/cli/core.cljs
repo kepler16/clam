@@ -30,7 +30,9 @@
                 (fn [^js yargs])
                 (resolve-to p :tailwind))
       (.command "release", "Optimised release build"
-                (fn [^js yargs])
+                (fn [^js yargs]
+                  (-> yargs
+                      (.option "vercel" {})))
                 (resolve-to p :release))
       (.demandCommand)
       (.recommendCommands)
@@ -54,14 +56,44 @@
     (catch js/Error e nil))
   (mkdirp/sync (str config-dir "/.clam/cp")))
 
-(defn handle-release [{:keys [config-dir]} argv]
+(def setup-shell "
+amazon-linux-extras install java-openjdk11
+curl -O https://download.clojure.org/install/linux-install-1.10.1.763.sh
+chmod +x linux-install-1.10.1.763.sh
+./linux-install-1.10.1.763.sh
+")
+
+(def exec (util/promisify child-process/exec))
+
+(defn setup-vercel []
+  (exec setup-shell))
+
+(defn release* [config-dir vercel?]
+
   (prepare-files config-dir)
+
   (doto (child-process/spawn
          "clojure"
-         #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
+         #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release" "vercel" vercel?]
          #js {:stdio "inherit"
               :cwd config-dir})
     (death/kill-process-on-death!)))
+
+(defn handle-release [{:keys [config-dir]} {:keys [vercel]}]
+  (if vercel
+    (-> (setup-vercel)
+        (.then
+         (fn [x]
+           (let [{:strs [stdout stderr]} (js->clj x)]
+
+             (when stderr
+               (js/console.error stderr))
+
+             (when stdout
+               (js/console.log stdout))
+
+             (release* config-dir vercel)))))
+    (release* config-dir vercel)))
 
 (defn handle-tailwind [{:keys [config-dir]} argv]
   (doto (child-process/spawn
