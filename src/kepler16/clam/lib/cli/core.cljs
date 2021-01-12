@@ -48,7 +48,14 @@
        :config-dir config-dir
        :config config})))
 
+(defn prepare-files [config-dir]
+  (try
+    (fs/unlinkSync "./api/dist/handler.js")
+    (catch js/Error e nil))
+  (mkdirp/sync (str config-dir "/.clam/cp")))
+
 (defn handle-release [{:keys [config-dir]} argv]
+  (prepare-files config-dir)
   (doto (child-process/spawn
          "clojure"
          #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
@@ -75,6 +82,7 @@
   ;; (doto (http/createServer (dev-server/requestListener root))
   ;;   (.listen 3000)))
 
+
 (defn handle-dev [{:keys [config-dir]} argv]
   ;; (doto (child-process/spawn
   ;;        "vercel"
@@ -82,11 +90,7 @@
   ;;        #js {:stdio "inherit"
   ;;             :cwd config-dir})
   ;;   (death/kill-process-on-death!))
-  (try
-    (fs/unlinkSync "./api/dist/handler.js")
-    (catch js/Error e nil))
-  (mkdirp/sync (str config-dir "/.clam/cp"))
-
+  (prepare-files config-dir)
   (dev-server config-dir)
 
   (doto (child-process/spawn

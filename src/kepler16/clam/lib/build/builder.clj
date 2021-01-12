@@ -123,6 +123,8 @@
 
 (defn release [{}]
   (let [system (ig/init {:clam/shadow-server {}})]
+    (write-dev-modules!)
+    (write-pages!)
     (cljs/release* build-api {})
     (cljs/release* build-site {})
     (ig/halt! system)
