@@ -50,7 +50,7 @@
 
 (defn handle-release [{:keys [config-dir]} argv]
   (doto (child-process/spawn
-         "clj"
+         "clojure"
          #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release"]
          #js {:stdio "inherit"
               :cwd config-dir})
@@ -90,7 +90,7 @@
   (dev-server config-dir)
 
   (doto (child-process/spawn
-         "clj"
+         "clojure"
          #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/watch"]
          #js {:stdio "inherit"
               :cwd config-dir})
