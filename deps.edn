@@ -16,7 +16,9 @@
   org.clojure/core.async {:mvn/version "1.3.610"}
   juxt/dirwatch {:mvn/version "0.2.5"}
   integrant/integrant {:mvn/version "0.8.0"}
-  integrant/repl {:mvn/version "0.3.2"}}
+  integrant/repl {:mvn/version "0.3.2"}
+  me.raynes/fs {:mvn/version "1.4.6"}
+  metosin/jsonista {:mvn/version "0.3.0"}}
 
  :aliases
  {:server {:exec-fn kepler16.clam.dev.core/start-alternative
@@ -31,7 +33,7 @@
   :generate-pom {:exec-fn kepler16.deploy/pom!
                  :exec-args {:group-id "kepler16"
                              :package-name "clam"
-                             :version "4.0.4"}}
+                             :version "4.0.11"}}
 
   :build {:exec-fn kepler16.deploy/build!
           :exec-args {}}

@@ -7,7 +7,9 @@
    [clojure.java.io :as io]
    [clojure.core.async :as a]
    [kepler16.clam.lib.build.analyze :as clam-analyze]
-   [clojure.pprint :as pprint]))
+   [clojure.pprint :as pprint]
+   [me.raynes.fs :as fs]
+   [jsonista.core :as json]))
 
 (defn clean-site-data [site-data]
   (-> site-data
@@ -121,12 +123,32 @@
    :clam/dev-modules-file {:server (ig/ref :clam/shadow-server)
                            :file-watcher (ig/ref :clam/file-watcher)}})
 
+(defn vercel-build! []
+  (fs/mkdirs ".vercel_build_output/static")
+  (spit (io/file ".vercel_build_output/static/o.md") "THIS IS A TEST MD")
+  (spit (io/file "public/y.md") "THIS IS A TEST MD")
+  (fs/copy-dir (io/file "public") (io/file ".vercel_build_output/"))
+  (fs/mkdirs ".vercel_build_output/functions/node/renderer")
+  (fs/copy (io/file "api/dist/handler.js") (io/file ".vercel_build_output/functions/node/renderer/index.js"))
+  (fs/copy-dir (io/file "node_modules") (io/file ".vercel_build_output/functions/node/renderer/node_modules"))
+
+  (let [routes
+        [{:handle "filesystem"}
+         {:src "/(.*)"
+          :dest "/.vercel/functions/renderer/index"}]]
+
+    (fs/mkdirs ".vercel_build_output/config")
+    (->> routes
+         (json/write-value-as-string)
+         (spit (io/file ".vercel_build_output/config/routes.json")))))
+
 (defn release [{}]
   (let [system (ig/init {:clam/shadow-server {}})]
     (write-dev-modules!)
     (write-pages!)
     (cljs/release* build-api {})
     (cljs/release* build-site {})
+    (vercel-build!)
     (ig/halt! system)
     (System/exit 0)))
 
