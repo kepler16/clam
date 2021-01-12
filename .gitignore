@@ -7,3 +7,5 @@ clam.iml
 node_modules
 server-components-demo
 target
+
+bin/cli.js
