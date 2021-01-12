@@ -124,14 +124,19 @@
                            :file-watcher (ig/ref :clam/file-watcher)}})
 
 (defn vercel-build! []
-  (fs/mkdirs ".vercel_build_output/static")
-  (spit (io/file ".vercel_build_output/static/o.md") "THIS IS A TEST MD")
-  (spit (io/file "public/y.md") "THIS IS A TEST MD")
-  (fs/copy-dir (io/file "public") (io/file ".vercel_build_output/"))
+  ;; prep
+  (fs/delete-dir ".vercel_build_output")
+  (fs/mkdirs ".vercel_build_output")
+
+  ;; static
+  (fs/copy-dir (io/file "public") (io/file ".vercel_build_output/static"))
+
+  ;; serverless
   (fs/mkdirs ".vercel_build_output/functions/node/renderer")
   (fs/copy (io/file "api/dist/handler.js") (io/file ".vercel_build_output/functions/node/renderer/index.js"))
   (fs/copy-dir (io/file "node_modules") (io/file ".vercel_build_output/functions/node/renderer/node_modules"))
 
+  ;; routes
   (let [routes
         [{:handle "filesystem"}
          {:src "/(.*)"
