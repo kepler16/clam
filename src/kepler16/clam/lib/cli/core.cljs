@@ -66,6 +66,7 @@ chmod +x linux-install-1.10.1.763.sh
 (def exec (util/promisify child-process/exec))
 
 (defn setup-vercel []
+  (println "installing clojure...")
   (exec setup-shell))
 
 (defn release* [config-dir vercel?]
@@ -79,7 +80,7 @@ chmod +x linux-install-1.10.1.763.sh
               :cwd config-dir})
     (death/kill-process-on-death!)))
 
-(defn handle-release [{:keys [config-dir]} {:keys [vercel]}]
+(defn handle-release [{:keys [config-dir]} {:as x :strs [vercel]}]
   (if vercel
     (-> (setup-vercel)
         (.then
@@ -92,7 +93,8 @@ chmod +x linux-install-1.10.1.763.sh
              (when stdout
                (js/console.log stdout))
 
-             (release* config-dir vercel)))))
+             (release* config-dir vercel))))
+        (.catch (fn [e] (js/console.error e))))
     (release* config-dir vercel)))
 
 (defn handle-tailwind [{:keys [config-dir]} argv]

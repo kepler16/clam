@@ -29,7 +29,7 @@ The build watcher kicks off a shadow-cljs server process and starts 2 watch proc
 - Clone `clam template`
 - run `npm install`
 - run `npx clam dev`
-- Connect to a remote repl from your editor (port should be auto picked up by the editor from `.shadow-cljs/nrepl` file). Attach to the shadow-cljs build: Either `:clam/api` or `clam/site` or both, depending on where you want your repl. Note that because there's no shadow-cljs.edn file, emacs (and probably others) won't auto pick up these builds so you will need to manually type them in.
+- Connect to a remote repl from your editor (port should be auto picked up by the editor from `.shadow-cljs/nrepl.port` file). Attach to the shadow-cljs build: Either `:clam/api` or `clam/site` or both, depending on where you want your repl. Note that because there's no shadow-cljs.edn file, emacs (and probably others) won't auto pick up these builds so you will need to manually type them in.
 
 You should have a hot reloadable development story. To add a new page to the site, just make a `.cljs` file in the corresponding place and
 
