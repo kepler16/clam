@@ -3,6 +3,8 @@
 
 Basically trying to make a nextjs for clojurescript. We're very much trying to provide the same things for the same reasons.
 
+Check out the [template](https://github.com/kepler16/clam-template) for an example of usage.
+
 # notes
 - We rely on `deps.edn`, no Leiningen support
 - Clam uses `shadow-cljs` under the hood
