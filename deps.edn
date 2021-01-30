@@ -3,22 +3,22 @@
  :paths ["src"]
 
  :deps
- {metosin/reitit {:mvn/version "0.5.10"}
-  thheller/shadow-cljs {:mvn/version "2.11.11"}
+ {metosin/reitit {:mvn/version "0.5.11"}
+  thheller/shadow-cljs {:mvn/version "2.11.15"}
   cljs-bean/cljs-bean {:mvn/version "1.6.0"}
   uix/core {:git/url "https://github.com/roman01la/uix.git"
             :deps/root "core"
-            :sha "2891747e1340986195448052354c3390c9eadd03"}
+            :sha "a4a7e0191f3c84a48b7de14d8f98bcfa4a9c82c3"}
   uix/dom {:git/url "https://github.com/roman01la/uix.git"
            :deps/root "dom"
-           :sha "2891747e1340986195448052354c3390c9eadd03"}
+           :sha "a4a7e0191f3c84a48b7de14d8f98bcfa4a9c82c3"}
   cli-matic/cli-matic {:mvn/version "0.4.3"}
   org.clojure/core.async {:mvn/version "1.3.610"}
   juxt/dirwatch {:mvn/version "0.2.5"}
   integrant/integrant {:mvn/version "0.8.0"}
   integrant/repl {:mvn/version "0.3.2"}
   me.raynes/fs {:mvn/version "1.4.6"}
-  metosin/jsonista {:mvn/version "0.3.0"}}
+  metosin/jsonista {:mvn/version "0.3.1"}}
 
  :aliases
  {:server {:exec-fn kepler16.clam.dev.core/start-alternative
@@ -33,7 +33,7 @@
   :generate-pom {:exec-fn kepler16.deploy/pom!
                  :exec-args {:group-id "kepler16"
                              :package-name "clam"
-                             :version "4.0.14"}}
+                             :version "4.0.15"}}
 
   :build {:exec-fn kepler16.deploy/build!
           :exec-args {}}
