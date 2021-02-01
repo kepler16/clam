@@ -15,9 +15,11 @@
     v))
 
 (defn var->page [v]
-  {:var-def v
-   :component (:name v)
-   :path (page/file-path->url-path (:file v))})
+  (let [path (or (some-> v :meta :clam/path)
+                 (page/file-path->url-path (:file v)))]
+    {:var-def v
+     :component (:name v)
+     :path path}))
 
 (defn read-config! []
   (try
