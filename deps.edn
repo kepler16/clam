@@ -24,22 +24,14 @@
  {:server {:exec-fn kepler16.clam.dev.core/start-alternative
            :exec-args {}}
 
-  :deployer {:jvm-opts ["--illegal-access=deny"]
-             :extra-deps {org.clojure/clojure {:mvn/version "1.10.1"}
-                          kepler16/deploy {:mvn/version "0.0.8"}}}
-
-  :dev {:extra-deps {kepler16/deploy {:local/root "../deploy"}}}
-
-  :generate-pom {:exec-fn kepler16.deploy/pom!
-                 :exec-args {:group-id "kepler16"
-                             :package-name "clam"
-                             :version "4.0.16"}}
-
-  :build {:exec-fn kepler16.deploy/build!
-          :exec-args {}}
-
-  :deploy {:exec-fn kepler16.deploy/deploy!
-           :exec-args {}}
-
-  :deploy-clojars {:exec-fn kepler16.deploy/deploy-clojars!
-                   :exec-args {}}}}
+  :deploy! {:jvm-opts ["--illegal-access=deny"]
+            :extra-deps {kepler16/deploy {:mvn/version "0.1.0"}}
+            :exec-fn kepler16.deploy/build-and-deploy!
+            :exec-args {:jar "target/lib.jar"
+                         :target :clojars
+                         :jar-type :thin
+                         :sync-pom true
+                         :verbose true
+                         :group-id kepler16
+                         :artifact-id clam
+                         :version "4.0.18"}}}}

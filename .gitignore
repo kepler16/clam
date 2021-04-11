@@ -9,3 +9,5 @@ server-components-demo
 target
 
 bin/cli.js
+/.clj-kondo/
+/.lsp/

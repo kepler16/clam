@@ -3,7 +3,9 @@
 
 
 (defn drop-trailing-cljs [path]
-  (str/replace path #".cljs$" ""))
+  (-> path
+      (str/replace #".cljs$" "")
+      (str/replace #".cljc$" "")))
 
 (defn drop-trailing-index [path]
   (str/replace path #"index$" ""))

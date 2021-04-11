@@ -58,7 +58,8 @@
   (js/console.log "reloading..."))
 
 (defn ^:dev/after-load after-load! []
-  (render!)
+  (when (clam.util/browser?)
+    (render!))
   (js/console.log "reloaded..."))
 
 (defn browser-init! []
