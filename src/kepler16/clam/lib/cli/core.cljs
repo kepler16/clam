@@ -75,7 +75,9 @@ chmod +x linux-install-1.10.1.763.sh
 
   (doto (child-process/spawn
          "clojure"
-         #js [(if vercel? "" "-A:dev") "-X" "kepler16.clam.lib.build.builder/release" "vercel" vercel?]
+         (if vercel?
+           #js ["-X" "kepler16.clam.lib.build.builder/release" "vercel" vercel?]
+           #js ["-A:dev" "-X" "kepler16.clam.lib.build.builder/release" "vercel" vercel?])
          #js {:stdio "inherit"
               :cwd config-dir})
     (death/kill-process-on-death!)))
