@@ -12,6 +12,16 @@
   (into
    [:> rr-dom/Redirect props]))
 
+(defn link [props child]
+  (into
+   [:> rr-dom/Link props]
+   child))
+
+(defn nav-link [props child]
+  (into
+   [:> rr-dom/NavLink props]
+   child))
+
 (defn switch [props & routes]
   (into
    [:> rr-dom/Switch props]

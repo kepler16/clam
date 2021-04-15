@@ -1,5 +1,5 @@
 const resolve = (f) => {
-	// delete require.cache[require.resolve(f)];
+	delete require.cache[require.resolve(f)];
 	return require(f);
 }
 
