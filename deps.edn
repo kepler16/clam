@@ -19,14 +19,14 @@
  {:server {:exec-fn kepler16.clam.dev.core/start-alternative
            :exec-args {}}
 
-  :deploy! {:jvm-opts ["--illegal-access=deny"]
-            :extra-deps {kepler16/deploy {:mvn/version "0.1.0"}}
-            :exec-fn kepler16.deploy/build-and-deploy!
-            :exec-args {:jar "target/lib.jar"
-                         :target :clojars
-                         :jar-type :thin
-                         :sync-pom true
-                         :verbose true
-                         :group-id kepler16
-                         :artifact-id clam
-                         :version "4.0.21"}}}}
+  :publish! {:jvm-opts ["--illegal-access=deny"]
+             :extra-deps {kepler16/deploy {:mvn/version "0.1.0"}}
+             :exec-fn kepler16.deploy/build-and-deploy!
+             :exec-args {:jar "target/lib.jar"
+                          :target :clojars
+                          :jar-type :thin
+                          :sync-pom true
+                          :verbose true
+                          :group-id kepler16
+                          :artifact-id clam
+                          :version "4.0.22"}}}}
